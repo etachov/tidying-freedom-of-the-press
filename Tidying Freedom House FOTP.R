@@ -37,3 +37,14 @@ fh_clean <- melt(fh_raw, id.vars = c("country")) %>%
   mutate_each(funs(as.numeric), a, b, c, score)
 
 
+## create a quick gif showing the change in distribution from 2001 to 2014
+
+p <- ggplot(fh_clean, aes(x = score, frame = factor(year.collected))) +
+  geom_density(fill = "#445869", color = "white", size = 1) +
+  labs(y = "",
+       x = "Freedom of the Press Score\nHigher Score = Greater Repression") +
+  theme(plot.title = element_text(size = 24, hjust = 1, face = "bold"), 
+        axis.title = element_text(size = 18, face = "bold"), 
+        axis.text = element_text(size = 14)) 
+
+gg_animate(p, "fotp_2001_2014.gif", interval = .3)
