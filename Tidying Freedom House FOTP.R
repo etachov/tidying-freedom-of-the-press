@@ -2,11 +2,11 @@
 ## libraries
 
 library(downloader) # makes downloading from https simple
-library(readxl) # imparting excel files
-library(tidyr) #
-library(reshape2)
-library(ggplot2)
-library(gganimate)
+library(readxl) # importing excel files
+library(tidyr) # data manipulation
+library(reshape2) # data manipulation
+library(ggplot2) # chart
+library(gganimate) # gifs
 
 
 ## download and import data
@@ -25,11 +25,11 @@ names(fh_raw)[1] <- "country"
 ## tidying the data
 
 fh_clean <- melt(fh_raw, id.vars = c("country")) %>% 
-  # add variables for the year collected and the year reported
+  # add variables for the year collected and the year reported. freedom house's reporting lags one year.
   mutate(year.collected = rep(c(2001:2014), each = 5*210),
          year.reported = year.collected + 1) %>%
   rename(metric = variable, result = value) %>% 
-  # delete the extra info from the variable names using gsub and use tolower so our variable names are standardized
+  # delete the extra info from the variable names using gsub and use tolower so the variable names are standardized
   mutate(metric = tolower(gsub("\\..*", "", metric))) %>%
   # and finally spread it back out a bit so we have the subscores, final score and rating for each year-country combo
   spread(metric, result) %>%
